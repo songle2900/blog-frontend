@@ -30,7 +30,7 @@ const RegisterForm = () => {
             // TODO: error
             return;
         }
-        
+        dispatch(register({ username, password }));
     };
 
     // Initialize the form when the component is first rendered
