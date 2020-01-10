@@ -18,7 +18,7 @@ const RegisterForm = () => {
             changeField({
                 form: 'register',
                 key: name,
-                value
+                value,
             })
         );
     };
