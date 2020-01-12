@@ -13,8 +13,21 @@ export const tempSetUser = createAction(TEMP_SET_USER, user => user);
 export const check = createAction(CHECK);
 
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
+
+// Initialize user information if login verification fails
+function checkFailureSaga() {
+    try {
+        localStorage.removeItem('user');    // Remove user from localStorage
+    } catch (e) {
+        console.log('localStorage is not working');
+    }
+}
+
 export function* userSaga() {
     yield takeLatest(CHECK, checkSaga);
+    
+    // Calling the checkFailureSaga function when the CHECK_FAILURE action occurs
+    yield takeLatest(CHECK_FAILURE, checkFailureSaga);
 };
 
 const initialState = {
