@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 
@@ -60,26 +60,61 @@ const TagListBlock = styled.div`
 `;
 
 // Use React.memo to handle rerender only when the tag value changes
-const TagItem = React.memo(({ tag }) => <Tag>#{tag}</Tag>);
+const TagItem = React.memo(({ tag, onRemove }) => (
+    <Tag onClick={() => onRemove(tag)}>#{tag}</Tag>
+));
 
 // Use React.memo to handle rerender only when the tags value changes
-const TagList = React.memo(({ tags }) => (
+const TagList = React.memo(({ tags, onRemove }) => (
     <TagListBlock>
         {tags.map(tag => (
-            <TagItem key={tag} tag={tag} />
+            <TagItem key={tag} tag={tag} onRemove={onRemove} />
         ))}
     </TagListBlock>
 ));
 
 const TagBox = () => {
+    const [input, setInput] = useState('');
+    const [localTags, setLocalTags] = useState([]);
+
+    const insertTag = useCallback(
+        tag => {
+            if (!tag) return; // Nothing if tag is empty
+            if (localTags.includes(tag)) return; // Do not add if tag already exists
+            setLocalTags([...localTags, tag]);
+        }, [localTags]
+    );
+
+    const onRemove = useCallback(
+        tag => {
+            setLocalTags(localTags.filter(t => t !== tag));
+        }, [localTags]
+    );
+
+    const onChange = useCallback(e => {
+        setInput(e.target.value);
+    }, []);
+
+    const onSubmit = useCallback(
+        e => {
+            e.preventDefault();
+            insertTag(input.trim()); // Insert after removing leading and trailing spaces
+            setInput(''); // Reset input
+        }, [input, insertTag]
+    )
+
     return (
         <TagBoxBlock>
             <h4>Tag</h4>
-            <TagForm>
-                <input placeholder="Please enter a tag" />
+            <TagForm onSubmit={onSubmit}>
+                <input 
+                    placeholder="Please enter a tag" 
+                    value={input}
+                    onChange={onChange}
+                />
                 <button type="submit">Add</button>
             </TagForm>
-            <TagList tags={['Tag1', 'Tag2', 'Tag3']} />
+            <TagList tags={localTags} onRemove={onRemove} />
         </TagBoxBlock>
     );
 };
