@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, register } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
@@ -6,6 +6,7 @@ import { check } from '../../modules/user';
 import { withRouter } from 'react-router-dom';
 
 const RegisterForm = ({ history }) => {
+    const [error, setError] =  useState(null);
     const dispatch = useDispatch();
     const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
         form: auth.register,
@@ -30,8 +31,17 @@ const RegisterForm = ({ history }) => {
     const onSubmit = e => {
         e.preventDefault();
         const { username, password, passwordConfirm } = form;
+        // If any field is empty
+        if ([username, password, passwordConfirm].includes('')) {
+            setError('Please fill in all blanks.');
+            return;
+        }
+
+        // If the passwords do not match
         if (password !== passwordConfirm) {
-            // TODO: error
+            setError('Passwords do not match.');
+            dispatch(changeField({ form: 'register', key: 'password', value: '' }));
+            dispatch(changeField({ form: 'register', key: 'passwordConfirm', value: '' }));
             return;
         }
         dispatch(register({ username, password }));
@@ -45,10 +55,16 @@ const RegisterForm = ({ history }) => {
     // register success / failure
     useEffect(() => {
         if (authError) {
-            console.log('Error');
-            console.log(authError);
+            // When user name already exists
+            if (authError.response.status === 409) {
+                setError('This user name already exists.');
+                return;
+            }
+            // Other reasons
+            setError('Register failed');
             return;
         }
+
         if (auth) {
             console.log('Register Success');
             console.log(auth);
@@ -59,6 +75,8 @@ const RegisterForm = ({ history }) => {
     // Make sure the user value is set correctly
     useEffect(() => {
         if (user) {
+            console.log('check API success');
+            console.log(user);
             history.push('/'); // Move to home page
         }
     }, [history, user]);
@@ -68,7 +86,8 @@ const RegisterForm = ({ history }) => {
             type="register" 
             form={form} 
             onChange={onChange} 
-            onSubmit={onSubmit} 
+            onSubmit={onSubmit}
+            error={error}
         />
     );
 };
