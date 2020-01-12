@@ -18,13 +18,14 @@ const RegisterForm = () => {
             changeField({
                 form: 'register',
                 key: name,
-                value,
+                value
             })
         );
     };
 
     // Form registration event handler
     const onSubmit = e => {
+        e.preventDefault();
         const { username, password, passwordConfirm } = form;
         if (password !== passwordConfirm) {
             // TODO: error
@@ -52,7 +53,12 @@ const RegisterForm = () => {
     }, [auth, authError]);
 
     return (
-        <AuthForm type="register" form={form} onChange={onChange} onSubmit={onSubmit} />
+        <AuthForm 
+            type="register" 
+            form={form} 
+            onChange={onChange} 
+            onSubmit={onSubmit} 
+        />
     );
 };
 

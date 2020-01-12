@@ -3,7 +3,7 @@ import client from './client';
 // API function
 
 // Login
-export const login = ({ username, password }) => 
+export const login = ({ username, password }) =>
     client.post('/api/auth/login', { username, password });
 
 // Register

@@ -15,17 +15,17 @@ const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes(
     'auth/LOGIN'
 );
 
-export const changeField = createAction(CHANGE_FIELD, ({ form, key, value}) => ({
+export const changeField = createAction(CHANGE_FIELD, ({ form, key, value }) => ({
     form,   // register, login
     key,    // username, password, passwordConfrim
     value   // The actual value want to replace
 }));
 
-export const initializeForm = createAction(INITIALIZE_FORM, form => form);  // register / login
+export const initializeForm = createAction(INITIALIZE_FORM, form => form);  // register/login
 
 export const register = createAction(REGISTER, ({ username, password }) => ({
     username,
-    password,
+    password
 }));
 
 export const login = createAction(LOGIN, ({ username, password }) => ({
@@ -34,10 +34,10 @@ export const login = createAction(LOGIN, ({ username, password }) => ({
 }));
 
 // Creating Saga
-const regisetrSaga = createRequestSaga(REGISTER, authAPI.register);
+const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 export function* authSaga() {
-    yield takeLatest(REGISTER, regisetrSaga);
+    yield takeLatest(REGISTER, registerSaga);
     yield takeLatest(LOGIN, loginSaga);
 }
 
