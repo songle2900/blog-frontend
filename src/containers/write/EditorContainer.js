@@ -9,9 +9,11 @@ const EditorContainer = () => {
         title: write.title,
         body: write.body
     }));
+
     const onChangeField = useCallback(payload => dispatch(changeField(payload)), [
         dispatch
     ]);
+    
     // Initialize when unmounted
     useEffect(() => {
         return () => {
