@@ -5,7 +5,7 @@ const ResponsiveBlock = styled.div`
     padding-left: 1rem;
     padding-right: 1rem;
     width: 1024px;
-    margin: 0 auth; /* Center aligned */
+    margin: 0 auto; /* Center aligned */
 
     /* Change horizontal size based on browser size */
     @media (max-width: 1024px) {
