@@ -21,6 +21,7 @@ const Pagination = ({ page, lastPage, username, tag }) => {
     return (
         <PaginationBlock>
             <Button
+                // If it is the first page, disable the previous button
                 disabled={page === 1}
                 to={
                     page === 1 ? undefined : buildLink({ username, tag, page: page - 1})
@@ -30,6 +31,7 @@ const Pagination = ({ page, lastPage, username, tag }) => {
             </Button>
             <PageNumber>{page}</PageNumber>
             <Button
+                // If it is the last page, disable the next button
                 disabled={page === lastPage}
                 to={
                     page === lastPage ? undefined : buildLink({ username, tag, page: page + 1})
