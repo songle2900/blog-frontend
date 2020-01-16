@@ -6,7 +6,7 @@ const AskRemoveModal = ({ visible, onConfirm, onCancle }) => {
         <AskModal
             visible={visible}
             title="Post delete"
-            description="Are you sure deleting this post?"
+            description="Are you srue you want to delete this post?"
             confirmText="Delete"
             onConfirm={onConfirm}
             onCancle={onCancle}
